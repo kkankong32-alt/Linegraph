@@ -1,0 +1,603 @@
+
+        /* CSS 변수 설정 (고급스러운 넷플릭스 스타일 테마) */
+        :root {
+            --bg-color: #0F0F0F;
+            --card-bg: #181818;
+            --primary-red: #E50914;
+            --primary-red-hover: #C11119;
+            --text-main: #FFFFFF;
+            --text-muted: #A3A3A3;
+            --input-bg: #262626;
+            --border-color: #333333;
+            --glass-bg: rgba(15, 15, 15, 0.75);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* --- 인트로 (스플래시) 스크린 --- */
+        #intro-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000;
+            background-image: url('./image 01.png');
+            background-size: contain; 
+            background-repeat: no-repeat;
+            background-position: center;
+            z-index: 9999;
+            cursor: pointer;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        #intro-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, transparent 60%, rgba(0,0,0,0.8) 100%);
+            pointer-events: none;
+        }
+
+        .intro-ui-container {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 20px;
+        }
+
+        .bgm-control {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 500;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bgm-control:hover {
+            background: rgba(0, 0, 0, 0.8);
+            border-color: white;
+            transform: scale(1.05);
+        }
+
+        .click-to-start {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+            animation: pulse 1.5s infinite;
+            letter-spacing: 1px;
+            text-align: right;
+            line-height: 1.4;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.5; transform: scale(0.98); }
+            50% { opacity: 1; transform: scale(1.02); }
+            100% { opacity: 0.5; transform: scale(0.98); }
+        }
+
+        .hidden-fade {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* --- 상단 헤더 및 진행 바 --- */
+        header {
+            background-color: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            color: var(--primary-red);
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+        }
+
+        .progress-bar {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .step-indicator {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .step-indicator.active {
+            color: var(--text-main);
+        }
+
+        .step-indicator.active .step-num {
+            background-color: var(--primary-red);
+            color: white;
+            box-shadow: 0 0 15px rgba(229, 9, 20, 0.4);
+        }
+
+        .step-num {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--input-bg);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .step-arrow {
+            color: var(--border-color);
+            font-size: 0.8rem;
+        }
+
+        /* --- 메인 컨테이너 --- */
+        main {
+            flex: 1;
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 35px;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #fff;
+        }
+
+        /* --- 공통 입력 요소 --- */
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--text-muted);
+            font-size: 1.05rem;
+        }
+
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 16px;
+            font-size: 1.1rem;
+            border-radius: 4px;
+            font-family: inherit;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: var(--primary-red);
+            box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.2);
+        }
+
+        .btn-netflix {
+            background-color: var(--primary-red);
+            color: white;
+            border: none;
+            padding: 18px 36px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(229, 9, 20, 0.3);
+        }
+
+        .btn-netflix:hover {
+            background-color: var(--primary-red-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(229, 9, 20, 0.4);
+        }
+
+        .btn-netflix:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--text-muted);
+            padding: 14px 24px;
+            font-size: 1.05rem;
+            font-weight: 500;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-main);
+            background-color: rgba(255,255,255,0.05);
+        }
+
+        /* --- STEP 1: 표 입력 --- */
+        .grid-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 25px;
+            text-align: center;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th {
+            background-color: #222;
+            color: var(--text-muted);
+            padding: 18px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+            transition: background-color 0.2s;
+        }
+
+        tr:hover td {
+            background-color: rgba(255,255,255,0.02);
+        }
+
+        td input[type="text"], td input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            background-color: transparent;
+            border: 1px solid transparent;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        td input:focus {
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+        }
+
+        .color-picker {
+            width: 44px;
+            height: 44px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            padding: 0;
+            background: transparent;
+            transition: transform 0.2s;
+        }
+
+        .color-picker:hover {
+            transform: scale(1.1);
+        }
+
+        .color-picker::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+        .color-picker::-webkit-color-swatch {
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+        }
+
+        .btn-delete {
+            background-color: transparent;
+            color: #ff4d4d;
+            border: 1px solid rgba(255, 77, 77, 0.3);
+            border-radius: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .btn-delete:hover {
+            background-color: rgba(255, 77, 77, 0.1);
+            border-color: #ff4d4d;
+        }
+
+        .table-footer td {
+            font-size: 1.2rem;
+            font-weight: 700;
+            background-color: #222;
+            color: var(--text-main);
+            border-bottom: none;
+            padding: 18px;
+        }
+
+        .add-row-container {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        /* --- STEP 2 & 3: 캔버스 및 설정 --- */
+        .split-layout {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+        }
+
+        .canvas-wrapper {
+            flex: 2;
+            position: sticky;
+            top: 100px;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; 
+            background-color: white; 
+            border-radius: 4px;
+            overflow: hidden;
+            background-image: linear-gradient(45deg, #e0e0e0 25%, transparent 25%), 
+                              linear-gradient(-45deg, #e0e0e0 25%, transparent 25%), 
+                              linear-gradient(45deg, transparent 75%, #e0e0e0 75%), 
+                              linear-gradient(-45deg, transparent 75%, #e0e0e0 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .settings-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            min-width: 320px; 
+        }
+
+        .scale-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .btn-toggle {
+            background-color: var(--input-bg);
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            padding: 14px 5px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-toggle:hover {
+            background-color: #333;
+            color: white;
+        }
+
+        .btn-toggle.active {
+            background-color: var(--primary-red);
+            color: white;
+            border-color: var(--primary-red);
+            box-shadow: 0 4px 10px rgba(229, 9, 20, 0.2);
+        }
+
+        .prompt-card {
+            background-color: rgba(229, 9, 20, 0.08);
+            border-left: 3px solid var(--primary-red);
+            padding: 18px;
+            border-radius: 4px;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: #eee;
+            animation: fadeIn 0.5s ease;
+            display: none; 
+            margin-bottom: 25px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        input[type="range"] {
+            width: 100%;
+            margin: 20px 0;
+            accent-color: var(--primary-red);
+            height: 6px;
+            background: var(--input-bg);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .bg-color-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .bg-option {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .bg-option:hover {
+            transform: scale(1.1);
+        }
+        .bg-option.active {
+            border-color: var(--primary-red);
+            transform: scale(1.15);
+            box-shadow: 0 0 0 2px var(--bg-color), 0 0 0 4px var(--primary-red);
+        }
+
+        .decorate-item-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .decorate-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--input-bg);
+            padding: 12px 20px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 1024px) {
+            .split-layout {
+                flex-direction: column;
+            }
+            .canvas-wrapper {
+                position: static;
+                width: 100%;
+            }
+            .settings-panel {
+                width: 100%;
+            }
+            .grid-2col {
+                grid-template-columns: 1fr;
+            }
+            .scale-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        @media (max-width: 600px) {
+            .scale-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .progress-bar {
+                gap: 10px;
+            }
+            .step-indicator span:last-child {
+                display: none; 
+            }
+            .intro-ui-container {
+                top: 20px;
+                right: 20px;
+            }
+        }
+    /* 기존 막대그래프 참교육의 구성과 색상을 유지하고 가독성만 보강 */
+:root{--text-muted:#D5D5D5;--border-color:#555;--input-bg:#262626}
+body{font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif;line-height:1.6;font-size:18px}
+[hidden]{display:none!important}button,input,select{font-family:inherit}button{touch-action:manipulation}button:disabled{opacity:.45;cursor:not-allowed}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #ffd75e;outline-offset:4px}a{color:#f5f5f5}
+#intro-screen{background-image:url('./hero.png?v=4')}.intro-ui-container{top:28px;right:30px;gap:16px}.bgm-control{font-size:17px;font-weight:700;border-color:#999;background:#000c}.start-button{padding:16px 22px;border:1px solid #ddd;background:#000c;color:#fff;font-size:23px;font-weight:800;line-height:1.65;border-radius:6px;cursor:pointer;text-align:right;text-shadow:0 2px 8px #000}.start-button:hover{background:#e50914}.intro-credit{position:absolute;bottom:15px;left:50%;transform:translateX(-50%);background:#000c;padding:5px 18px;border-radius:4px;font-size:15px;white-space:nowrap;color:#fff}
+#application{min-height:100vh;display:flex;flex-direction:column}header{padding:20px 28px}.header-content{max-width:1660px;gap:25px}h1{font-size:30px;color:#ff3340}.progress-bar{gap:16px}.step-indicator{font-size:18px;white-space:nowrap}.step-num{width:34px;height:34px}.step-arrow{color:#999}.step-indicator.active{color:#fff}
+main{max-width:1660px;padding:30px 28px;width:100%}.card{padding:30px;border:1px solid #3c3c3c;margin-bottom:24px}.section-title{font-size:25px;font-weight:800;line-height:1.5}.section-top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;margin-bottom:28px}.section-top .section-title{margin-bottom:0}.example-picker{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.example-picker label{font-size:16px;color:#ddd}.example-picker select{max-width:240px;background:#262626;border:1px solid #777;border-radius:4px;color:#fff;font-size:16px;padding:10px}.example-picker .btn-secondary{font-size:16px;padding:9px 14px}
+.input-group{margin-bottom:24px}.input-group label{font-size:19px;color:#eee;font-weight:700;margin-bottom:10px}input:not([type]),input[type=text],input[type=number]{background:#262626;border:1px solid #666;color:white;padding:14px 16px;font-size:21px;font-weight:600;width:100%;border-radius:4px;min-width:0}input::placeholder{color:#bbb}.axis-fields{display:grid;grid-template-columns:minmax(0,1fr) 10px 90px 10px;align-items:center;gap:9px}.table-note{font-size:17px;margin-bottom:14px;color:#eee;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.table-note span{color:#ccc;font-size:15px}th{color:#fff;background:#292929;font-weight:700;font-size:20px;padding:14px}td{padding:8px 12px}td input[type=number]{font-size:22px;font-weight:700;background:#222;border:1px solid #555;padding:10px 14px}.delete-col{width:110px}.btn-delete{font-size:16px;padding:9px 16px;color:#ffadb0;border-color:#a64349}.add-row-container{margin-bottom:25px}.btn-secondary{color:#fff;font-weight:700;border-color:#aaa;font-size:18px}.btn-netflix{font-size:21px;font-weight:800;padding:17px 22px;box-shadow:0 3px 12px #e5091426}
+.split-layout{gap:24px;align-items:flex-start}.canvas-wrapper{flex:1;min-width:0;top:104px;padding:18px;border-color:#444}.settings-panel{flex:0 0 380px;min-width:0;gap:0}.settings-panel .card{padding:24px}.canvas-toolbar{display:flex;justify-content:space-between;gap:10px;align-items:center;font-size:19px;font-weight:700;margin-bottom:14px}.small{font-size:15px;padding:8px 11px}.canvas-scroll{overflow-x:auto;scrollbar-color:#777 #222}.canvas-container{padding-top:62.5%;background:white;min-width:720px;border-radius:0}.graph-caption{font-size:17px;color:#eee;margin-top:13px;line-height:1.65}.mobile-note{display:none;font-size:16px;color:#eee;margin-top:10px}
+.scale-grid{gap:10px}.btn-toggle{font-size:20px;padding:10px 5px;color:#fff;font-weight:700;border-color:#666}#auto-scale{font-size:16px}.btn-toggle.active{background:#e50914}.inline-input{display:flex;gap:12px;align-items:center}.inline-input input{width:150px}.unit-text{font-size:18px;color:#eee;white-space:nowrap}.input-group .compact-label{font-size:17px;margin:10px 0 8px}.check-label,.input-group .check-label{display:flex;align-items:center;gap:10px;font-size:19px;line-height:1.7;color:#fff;font-weight:700}input[type=checkbox]{width:22px;height:22px;accent-color:#e50914;flex:0 0 22px}.setting-note{font-size:16px;line-height:1.7;color:#ddd;margin-top:12px}.prompt-card{display:block;font-size:17px;font-weight:500;border-color:#e50914;background:#e509141a;padding:15px;margin-bottom:20px;line-height:1.75;color:#fff;animation:none}.control-actions{display:flex;gap:10px;margin-top:26px}.control-actions .btn-secondary{flex:1;padding:14px 10px;white-space:nowrap;font-size:17px}.control-actions .btn-netflix{flex:1.6;padding:14px 10px;white-space:nowrap;font-size:18px}.error-message{background:#4a2024;border:1px solid #df6670;color:#fff;padding:14px 16px;margin:15px 0;font-size:18px;border-radius:4px}.color-controls{display:flex;gap:35px}.color-controls label{display:flex;gap:15px;align-items:center}.color-picker{width:50px;height:50px}.bg-option{padding:0;border:2px solid #777}.bg-color-options{gap:15px}input[type=range]{height:8px;margin:18px 0;accent-color:#e50914}output{display:inline-block;float:right;border:1px solid #666;border-radius:4px;min-width:35px;text-align:center;color:#fff;font-size:17px}footer{display:flex;align-items:center;justify-content:center;gap:18px 30px;flex-wrap:wrap;padding:22px 28px;border-top:1px solid #444;color:#ddd;font-size:16px}footer a{text-underline-offset:4px}.footer-music{border:1px solid #666;background:#222;color:#fff;font-size:15px;font-weight:600;padding:7px 12px;border-radius:4px;cursor:pointer}
+@media(max-width:1190px){.split-layout{flex-direction:column}.canvas-wrapper{width:100%;position:static}.settings-panel{width:100%;flex:auto}.settings-panel .card{padding:28px}.settings-panel .input-group{max-width:650px}.control-actions{max-width:650px}.canvas-container{min-width:720px}.header-content{flex-wrap:wrap}.progress-bar{gap:14px}.scale-grid{grid-template-columns:repeat(8,minmax(0,1fr))}}
+@media(max-width:760px){header{padding:16px}h1{font-size:25px}.header-content{gap:16px}main{padding:20px 12px}.card{padding:20px 16px}.section-title{font-size:22px}.progress-bar{gap:8px;justify-content:space-between;width:100%}.step-indicator{gap:5px;font-size:14px}.step-num{width:26px;height:26px;font-size:14px}.step-indicator span:last-child{display:inline}.step-arrow{font-size:10px}.grid-2col{gap:0}.canvas-wrapper{padding:12px}.canvas-toolbar{font-size:16px;flex-wrap:wrap}.small{font-size:14px}.mobile-note{display:block}.scale-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.settings-panel .card{padding:22px 16px}.canvas-scroll{width:100%}.canvas-container{width:720px;min-width:720px;height:450px;padding-top:0}.example-picker{width:100%}.example-picker select{max-width:190px}.input-group label{font-size:18px}.axis-fields{grid-template-columns:minmax(0,1fr) 10px 75px 10px;gap:6px}.delete-col{width:70px}th{font-size:18px;padding:12px 4px}td{padding:7px 4px}td input[type=number]{padding:8px;font-size:20px}.btn-delete{font-size:14px;padding:7px 9px}.intro-ui-container{top:16px;right:16px}.bgm-control{font-size:15px;padding:8px 12px}.start-button{font-size:19px;padding:12px 15px}.intro-credit{font-size:13px}.control-actions .btn-netflix{font-size:17px}.graph-caption{font-size:16px}footer{padding:20px 15px;font-size:15px;gap:15px}.section-top{gap:18px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+#auto-scale{font-size:14px;white-space:nowrap}
+
+.canvas-scroll{max-height:72vh;overflow:auto}.break-group{border:1px solid #777;border-radius:6px;padding:14px}.change-fit{width:100%;margin:0 0 18px;font-size:18px}.canvas-scroll .canvas-container{flex-shrink:0}
+
+
+#auto-scale.change-fit{font-size:18px;white-space:normal}
+
+
+button.step-indicator{background:transparent;border:0;padding:8px 6px;font-family:inherit;cursor:pointer;border-radius:6px}button.step-indicator:hover{color:#fff;background:#ffffff15}button.step-indicator:focus-visible{outline:2px solid #fff;outline-offset:3px}

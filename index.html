@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+ <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+ <title>꺾은선그래프 참교육</title>
+ <meta name="description" content="표를 입력하고, 눈금과 물결선을 정해 나만의 꺾은선그래프를 만들어요.">
+ <link rel="icon" href="data:,">
+ <link rel="stylesheet" href="style.css?v=5"><script src="config.js"></script><script src="app.js?v=5" defer></script>
+</head>
+<body>
+ <section id="intro-screen" aria-label="꺾은선그래프 참교육 시작 화면">
+  <div class="intro-ui-container"><button type="button" class="bgm-control" id="intro-music" aria-pressed="false">♫ 배경음악 켜기</button><button type="button" class="start-button" id="start">화면을 클릭하여<br>참교육 시작하기 ▶</button></div>
+  <div class="intro-credit">기획·제작 <strong>쓰로인훈쌤 김종훈</strong></div>
+ </section>
+ <audio id="bgm" src="bgm.mp3" loop preload="metadata"></audio>
+ <div id="application" inert>
+ <header><div class="header-content"><h1>📈 꺾은선그래프 참교육</h1><nav class="progress-bar" aria-label="그래프 만들기 단계">
+  <button type="button" class="step-indicator active" id="ind-step1" aria-current="step"><span class="step-num">1</span><span>표 입력</span></button><span class="step-arrow" aria-hidden="true">▶</span>
+  <button type="button" class="step-indicator" id="ind-step2"><span class="step-num">2</span><span>눈금 설정</span></button><span class="step-arrow" aria-hidden="true">▶</span>
+  <button type="button" class="step-indicator" id="ind-step3"><span class="step-num">3</span><span>꾸미기 &amp; 저장</span></button>
+ </nav></div></header>
+ <main>
+  <section id="step1-view"><div class="card">
+   <div class="section-top"><h2 class="section-title">📝 1단계: 조사한 자료를 표로 입력해요</h2><div class="example-picker"><label for="example">예시 자료</label><select id="example"><option value="fish">월별 갈치 어획량</option><option value="classes">연도별 학급 수</option><option value="jump">높이뛰기 최고 기록</option><option value="emotion">월별 감정 점수</option></select><button type="button" id="load-example" class="btn-secondary">불러오기</button></div></div>
+   <div class="input-group"><label for="graph-title">무엇을 조사했나요? (그래프 제목)</label><input type="text" id="graph-title" maxlength="40" value="월별 갈치 어획량"></div>
+   <div class="grid-2col"><div class="input-group"><label for="x-axis-name">가로에는 무엇을 나타내나요?</label><div class="axis-fields"><input id="x-axis-name" aria-label="가로축 이름" maxlength="12" value="월"><span>(</span><input id="x-unit" aria-label="가로축 단위" maxlength="6" value="월"><span>)</span></div></div><div class="input-group"><label for="y-axis-name">세로에는 무엇을 나타내나요?</label><div class="axis-fields"><input id="y-axis-name" aria-label="세로축 이름" maxlength="12" value="어획량"><span>(</span><input id="unit-name" aria-label="세로축 단위" maxlength="6" value="t"><span>)</span></div></div></div>
+   <p class="table-note">시간의 순서대로 입력해요. <span id="source-note">수학 110쪽 자료</span></p>
+   <table id="data-table"><thead><tr><th id="th-time">월 (월)</th><th id="th-value">어획량 (t)</th><th class="delete-col">삭제</th></tr></thead><tbody id="table-body"></tbody></table>
+   <div class="add-row-container"><button id="btn-add-row" class="btn-secondary">＋ 항목 추가하기 (최대 12개)</button></div>
+   <p id="data-error" class="error-message" role="alert" hidden></p>
+   <button id="btn-to-step2" class="btn-netflix">꺾은선그래프로 변환하기 ▶</button>
+  </div></section>
+  <section id="step23-view" class="split-layout" hidden>
+   <div class="canvas-wrapper"><div class="canvas-toolbar"><span>나의 꺾은선그래프</span><button id="replay" class="btn-secondary small">그리는 순서 다시 보기</button></div><div class="canvas-scroll"><div class="canvas-container"><canvas id="graphCanvas" width="1600" height="1000" role="img" aria-label="나의 꺾은선그래프"></canvas></div></div><p class="mobile-note">↔ 그래프를 좌우로 밀어 볼 수 있어요.</p><p id="graph-caption" class="graph-caption" aria-live="polite"></p></div>
+   <div class="settings-panel">
+    <div id="step2-controls" class="card"><h2 class="section-title">📏 2단계: 눈금 설정</h2>
+     <div class="input-group"><label>1. 세로 눈금 한 칸의 크기를 정해요</label><div class="scale-grid" id="scale-buttons"><button class="btn-toggle" data-scale="1">1</button><button class="btn-toggle" data-scale="2">2</button><button class="btn-toggle" data-scale="5">5</button><button class="btn-toggle" data-scale="10">10</button><button class="btn-toggle" data-scale="20">20</button><button class="btn-toggle" data-scale="50">50</button><button class="btn-toggle" data-scale="100">100</button></div><label class="compact-label" for="custom-scale">직접 입력</label><div class="inline-input"><input id="custom-scale" type="number" min="0.01" max="1000000" step="any" value="100"><span class="unit-text" id="scale-unit">t / 칸</span></div></div>
+     <button id="auto-scale" class="btn-secondary change-fit">변화가 잘 보이게 자동 맞춤</button><div class="input-group break-group"><label class="check-label"><input type="checkbox" id="use-break"> 2. 물결선으로 일부를 생략해요</label><div id="break-settings" hidden><label class="compact-label" for="break-value">물결선 위에서 시작할 값</label><div class="inline-input"><input id="break-value" type="number" min="0" step="any" value="0"><span id="break-unit" class="unit-text">t</span></div></div><p class="setting-note">모든 자료가 보이도록, 가장 작은 값 이하에서 시작해요.</p></div>
+     <p id="scale-summary" class="prompt-card"></p><p id="scale-error" class="error-message" role="alert" hidden></p>
+     <div class="control-actions"><button id="btn-back-to-step1" class="btn-secondary">◀ 표 수정</button><button id="btn-to-step3" class="btn-netflix">꾸미기 &amp; 저장 ▶</button></div>
+    </div>
+    <div id="step3-controls" class="card" hidden><h2 class="section-title">🎨 3단계: 꾸미기 &amp; 저장</h2>
+     <div class="input-group"><label for="line-width">1. 선의 두께 <output id="line-width-value">5</output></label><input type="range" id="line-width" min="2" max="10" value="5"></div>
+     <div class="input-group"><label for="point-size">2. 점의 크기 <output id="point-size-value">7</output></label><input type="range" id="point-size" min="4" max="13" value="7"></div>
+     <div class="input-group"><label>3. 점과 선의 색을 골라요</label><div class="color-controls"><label for="line-color">선 <input type="color" class="color-picker" id="line-color" value="#e50914"></label><label for="point-color">점 <input type="color" class="color-picker" id="point-color" value="#e50914"></label></div></div>
+     <div class="input-group"><label>4. 저장할 이미지의 배경색을 골라요</label><div class="bg-color-options"><button class="bg-option active" style="background:#FFFFFF" data-bg="#FFFFFF" aria-label="흰색" aria-pressed="true"></button><button class="bg-option" style="background:#F3F4F6" data-bg="#F3F4F6" aria-label="연한 회색" aria-pressed="false"></button><button class="bg-option" style="background:#E0F2FE" data-bg="#E0F2FE" aria-label="연한 파랑" aria-pressed="false"></button><button class="bg-option" style="background:#DCFCE7" data-bg="#DCFCE7" aria-label="연한 초록" aria-pressed="false"></button><button class="bg-option" style="background:#FEF08A" data-bg="#FEF08A" aria-label="연한 노랑" aria-pressed="false"></button><button class="bg-option" style="background:#FCE7F3" data-bg="#FCE7F3" aria-label="연한 분홍" aria-pressed="false"></button></div></div>
+     <label class="check-label"><input id="show-values" type="checkbox"> 점 위에 수치 표시하기</label>
+     <div class="control-actions"><button id="btn-back-to-step2" class="btn-secondary">◀ 눈금 수정</button><button id="btn-save-image" class="btn-netflix">↓ 이미지로 저장</button></div><p id="save-message" class="setting-note" role="status"></p>
+    </div>
+   </div>
+  </section>
+ </main>
+ <footer><span>기획·제작: <strong>쓰로인훈쌤 김종훈</strong></span><a id="review" href="https://kkankong32-alt.github.io/Bargraph/" target="_blank" rel="noopener">막대그래프 참교육 · 1학기 복습 ↗</a><button class="footer-music" id="music" aria-pressed="false">♫ 음악 켜기</button><button class="footer-music" id="back-intro">시작 화면</button></footer>
+ </div>
+</body></html>
+
